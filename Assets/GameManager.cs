@@ -5,7 +5,12 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private Transform[] lanes;
+    [SerializeField] private Transform[] laneSpawner;
     [SerializeField] private GameObject player;
+    [SerializeField] private GameObject[] _obstacles;
+    [SerializeField] private GameObject[] _pickups;
+    [SerializeField] private GameObject[] _enemies;
+
 
     private GameObject spawnedPlayer;
     public bool inputEnabled;
@@ -60,6 +65,54 @@ public class GameManager : MonoBehaviour
             {
                 spawnedPlayer.GetComponent<PlayerController>().MoveRight();
             }
+
+            if(Input.GetKeyDown(KeyCode.Space))
+            {
+                SpawnSomething();
+            }
         }
+    }
+
+    public void SpawnSomething()
+    {
+        int obstacleCount = 0;
+        int pickupCount = 0;
+        for (int i = 0; i < laneSpawner.Length; i++)
+        {
+            //spawn for each lane
+            int randomSpawn = Random.Range(0, 3);
+            switch (randomSpawn)
+            {
+                case 0:
+                    if (obstacleCount < 2)
+                    {
+                        Instantiate(GetRandomObjectFromArray(_obstacles), laneSpawner[i].transform.position, Quaternion.identity);
+                        obstacleCount++;
+                    }
+                    break;
+                case 1:
+                    if(pickupCount < 1)
+                    {
+                        Instantiate(GetRandomObjectFromArray(_pickups), laneSpawner[i].transform.position, Quaternion.identity);
+                        pickupCount++;
+                    }
+                    break;
+                case 2:
+                    Instantiate(GetRandomObjectFromArray(_enemies), laneSpawner[i].transform.position, Quaternion.identity);
+                    break;
+                case 3:
+                default:
+                    break;
+            }
+        }
+    }
+
+    private GameObject GetRandomObjectFromArray(GameObject[] arr)
+    {
+        if (arr.Length < 2)
+            return arr[0];
+
+        int idx = Random.Range(0, arr.Length);
+        return arr[idx];
     }
 }
