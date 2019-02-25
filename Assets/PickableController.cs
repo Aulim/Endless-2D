@@ -9,13 +9,14 @@ public class PickableController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        _speedMod = GameManager.Instance.SpeedMod;
     }
 
     // Update is called once per frame
     void Update()
     {
-        UpdatePosition();
+        if(GameManager.Instance.InputEnabled)
+            UpdatePosition();
     }
 
     void OnTriggerEnter2D(Collider2D collision)
