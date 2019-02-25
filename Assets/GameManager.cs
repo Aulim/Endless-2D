@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,16 +11,28 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject[] _obstacles;
     [SerializeField] private GameObject[] _pickups;
     [SerializeField] private GameObject[] _enemies;
-
+    [SerializeField] private Text _scoreText;
+    [SerializeField] private float initialSpawnTimer;
+    [SerializeField] private float initialSpawnInterval;
 
     private GameObject spawnedPlayer;
     public bool inputEnabled;
     private bool tapStarted;
     private float startX;
     private float endX;
+    private float spawnTimer;
+    private int score;
+    private int obstacleCountdown = 4;
+    private GameManager _instance;
+
+    public GameManager Instance
+    {
+        get { return _instance; }
+    }
 
     private void Awake()
     {
+        _instance = this;
         spawnedPlayer = Instantiate(player);
     }
 
@@ -29,6 +42,7 @@ public class GameManager : MonoBehaviour
         spawnedPlayer.GetComponent<PlayerController>().Lanes = lanes;
         spawnedPlayer.GetComponent<PlayerController>().Initialize(lanes.Length / 2);
 
+        spawnTimer = initialSpawnInterval;
         tapStarted = false;
     }
 
@@ -66,14 +80,36 @@ public class GameManager : MonoBehaviour
                 spawnedPlayer.GetComponent<PlayerController>().MoveRight();
             }
 
-            if(Input.GetKeyDown(KeyCode.Space))
+            //Spawner start after 3 secs
+            if(initialSpawnTimer > 0)
             {
-                SpawnSomething();
+                initialSpawnTimer -= Time.deltaTime;
+            }
+            else
+            {
+                if(spawnTimer > 0)
+                {
+                    spawnTimer -= Time.deltaTime;
+                }
+                else
+                {
+                    if (obstacleCountdown == 0)
+                    {
+                        SpawnSomething();
+                        obstacleCountdown = 4;
+                    }
+                    else
+                    {
+                        SpawnSomething(false);
+                        obstacleCountdown--;
+                    }
+                    spawnTimer = initialSpawnInterval;
+                }
             }
         }
     }
 
-    public void SpawnSomething()
+    public void SpawnSomething(bool includeObstacle = true)
     {
         int obstacleCount = 0;
         int pickupCount = 0;
@@ -84,10 +120,13 @@ public class GameManager : MonoBehaviour
             switch (randomSpawn)
             {
                 case 0:
-                    if (obstacleCount < 2)
+                    if (includeObstacle)
                     {
-                        Instantiate(GetRandomObjectFromArray(_obstacles), laneSpawner[i].transform.position, Quaternion.identity);
-                        obstacleCount++;
+                        if (obstacleCount < 2)
+                        {
+                            Instantiate(GetRandomObjectFromArray(_obstacles), laneSpawner[i].transform.position, Quaternion.identity);
+                            obstacleCount++;
+                        }
                     }
                     break;
                 case 1:
@@ -101,6 +140,7 @@ public class GameManager : MonoBehaviour
                     Instantiate(GetRandomObjectFromArray(_enemies), laneSpawner[i].transform.position, Quaternion.identity);
                     break;
                 case 3:
+                    break;
                 default:
                     break;
             }

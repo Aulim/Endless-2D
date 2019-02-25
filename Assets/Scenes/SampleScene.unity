@@ -705,6 +705,9 @@ MonoBehaviour:
   - {fileID: 1751453827097644, guid: 285071192ad847f4688b11807a8c61ab, type: 2}
   _enemies:
   - {fileID: 1550402868688024, guid: 01513993107338b4abcd826a5e7d1594, type: 2}
+  _scoreText: {fileID: 0}
+  initialSpawnTimer: 2
+  initialSpawnInterval: 1
   inputEnabled: 1
 --- !u!4 &574648560
 Transform:
