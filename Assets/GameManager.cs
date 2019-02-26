@@ -49,10 +49,12 @@ public class GameManager : MonoBehaviour
     {
         _instance = this;
         spawnedPlayer = Instantiate(player);
+        _endGamePanel.SetActive(false);
+        _pausedPanel.SetActive(false);
 
         _scoreText.text = string.Format("{0:D9}", (int)score);
         _moneyText.text = string.Format("{0:D9}", currentPlayMoney);
-        _lifeText.text = string.Format("{0:D9}", currentLife);
+        _lifeText.text = string.Format("{0:D2}", currentLife);
     }
 
     // Use this for initialization
@@ -118,6 +120,7 @@ public class GameManager : MonoBehaviour
                     {
                         SpawnSomething();
                         obstacleCountdown = 4;
+                        _speedMod += 0.25f;
                     }
                     else
                     {
@@ -199,7 +202,9 @@ public class GameManager : MonoBehaviour
 
     public void EndGame()
     {
-        _endGameScoreText.text = string.Format("Your score is {0}", score);
+        InputEnabled = false;
+        _endGamePanel.SetActive(true);
+        _endGameScoreText.text = string.Format("Your score is {0}", (int)score);
     }
 
     public void RestartGame()
@@ -210,7 +215,13 @@ public class GameManager : MonoBehaviour
     public void ModifyLife(int value)
     {
         currentLife += value;
-        _lifeText.text = string.Format("{0:D9}", currentLife);
+        if(currentLife > 0)
+            _lifeText.text = string.Format("{0:D2}", currentLife);
+        else
+        {
+            _lifeText.text = string.Format("{0:D2}", currentLife);
+            EndGame();
+        }
     }
 
     public void IncreaseMoney()

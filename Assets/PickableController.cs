@@ -4,32 +4,25 @@ using UnityEngine;
 
 public class PickableController : MonoBehaviour
 {
-    [SerializeField] private float _speedMod = 1;
+    protected float _speedMod = 1;
 
     // Use this for initialization
-    void Start()
+    protected virtual void Start()
     {
         _speedMod = GameManager.Instance.SpeedMod;
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         if(GameManager.Instance.InputEnabled)
             UpdatePosition();
     }
 
-    void OnTriggerEnter2D(Collider2D collision)
+    protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
         print("Called onTrigger");
         if(collision.CompareTag("Finish"))
-            Destroy(gameObject);
-    }
-
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        print("Called onCollision");
-        if (collision.gameObject.CompareTag("Finish"))
             Destroy(gameObject);
     }
 
