@@ -8,10 +8,16 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private Transform[] lanes;
     [SerializeField] private Transform[] laneSpawner;
+
+    [Header("Object")]
     [SerializeField] private GameObject player;
     [SerializeField] private GameObject[] _obstacles;
     [SerializeField] private GameObject[] _pickups;
     [SerializeField] private GameObject[] _enemies;
+    [SerializeField] private GameObject _bullet;
+    [SerializeField] private GameObject _shield;
+
+    [Header("Mechanics")]
     [SerializeField] private float initialSpawnTimer;
     [SerializeField] private float initialSpawnInterval;
     [SerializeField] private float _speedMod;
@@ -62,6 +68,12 @@ public class GameManager : MonoBehaviour
     {
         spawnedPlayer.GetComponent<PlayerController>().Lanes = lanes;
         spawnedPlayer.GetComponent<PlayerController>().Initialize(lanes.Length / 2);
+        spawnedPlayer.GetComponent<PlayerController>().IsShieldAvailable = true;
+        spawnedPlayer.GetComponent<PlayerController>().IsBulletAvailable = true;
+
+        spawnedPlayer.GetComponent<PlayerController>().Bullet = _bullet;
+        spawnedPlayer.GetComponent<PlayerController>().Shield = _shield;
+
 
         spawnTimer = initialSpawnInterval;
         tapStarted = false;

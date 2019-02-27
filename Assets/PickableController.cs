@@ -21,7 +21,6 @@ public class PickableController : MonoBehaviour
 
     protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
-        print("Called onTrigger");
         if(collision.CompareTag("Finish"))
             Destroy(gameObject);
     }

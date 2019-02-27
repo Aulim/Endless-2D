@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 114455474903797528}
   m_Layer: 0
   m_Name: Money
-  m_TagString: Untagged
+  m_TagString: Money
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -99,7 +99,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17a915e228be5da47a85562dc6a336be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speedMod: 5
 --- !u!212 &212022297841822302
 SpriteRenderer:
   m_ObjectHideFlags: 1
